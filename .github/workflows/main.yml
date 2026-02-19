@@ -12,7 +12,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Install Dependencies
         run: npm install
@@ -20,13 +20,14 @@ jobs:
       - name: Start Mindcraft Bot
         run: node main.js 
         env:
-          # حل مشكلة المفتاح: نخبره أننا نستخدم جوجل ونعطيه المفتاح الصحيح
+          # ربط المفتاح السري الذي أنشأته (GEMINI_API_KEY) بمتطلبات المشروع
           MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          # حل مشكلة العنوان: نحدد السيرفر الخارجي بدقة
-          MINECRAFT_HOST: 'gptoi.aternos.me'
-          MINECRAFT_PORT: '50962'
-          MINECRAFT_VERSION: '1.20.1'
+          
+          # إعدادات الاتصال المباشرة بسيرفرك
+          HOST: 'gptoi.aternos.me'
+          PORT: '50962'
+          VERSION: '1.20.1'
+          
+          # اسم البوت الذي اخترته
           BOT_NAME: 'Gemini'
-          # إعدادات إضافية لإجبار البوت على قراءة الإعدادات
-          USE_CONFIG: 'false'
