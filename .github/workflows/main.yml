@@ -2,7 +2,7 @@ name: Minecraft Bot 24/7
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # يتيح لك تشغيله يدوياً بضغطة زر
+  workflow_dispatch: # هذا الزر الذي ظهر لك في الصورة الثانية
 
 jobs:
   build:
@@ -12,11 +12,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # مشروع Mindcraft يحتاج إصدار حديث
+          node-version: '20'
       - run: npm install
-      - run: node main.js # هذا هو الملف الأساسي في مشروع Mindcraft
+      - run: node main.js 
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           MINECRAFT_HOST: 'gptoi.aternos.me'
           MINECRAFT_VERSION: '1.20.1'
-          BOT_NAME: 'Fanoos_AI'
+          BOT_NAME: 'Gemini'
