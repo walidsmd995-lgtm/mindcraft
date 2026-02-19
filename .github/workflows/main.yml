@@ -23,7 +23,11 @@ jobs:
           echo "export default {
             host: 'gptoi.aternos.me',
             port: 50962,
-            auth: 'offline'
+            auth: 'offline',
+            profiles: ['./profiles/gemini.json'],
+            load_memory: false,
+            init_message: 'Hello! I am Gemini.',
+            only_chat_with: []
           }" > settings.js
 
       - name: Start Bot
