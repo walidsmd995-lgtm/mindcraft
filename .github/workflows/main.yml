@@ -2,7 +2,7 @@ name: Minecraft Bot 24/7
 on:
   push:
     branches: [ develop, main ]
-  workflow_dispatch: # لتشغيل البوت يدوياً
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,6 +25,4 @@ jobs:
           MINECRAFT_PORT: '50962'
           MINECRAFT_VERSION: '1.20.1'
           BOT_NAME: 'Gemini'
-          # إعدادات إضافية لمشروع Mindcraft ليعمل تلقائياً
           USE_GOOGLE_GEMINI: 'true'
-          PROMPT_FILENAME: 'default.json'
