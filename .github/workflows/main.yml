@@ -2,8 +2,7 @@ name: Minecraft Bot 24/7
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron: '0 */6 * * *' # يعيد التشغيل كل 6 ساعات تلقائياً
+  workflow_dispatch: # يتيح لك تشغيله يدوياً بضغطة زر
 
 jobs:
   build:
@@ -13,8 +12,11 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20' # مشروع Mindcraft يحتاج إصدار حديث
       - run: npm install
-      - run: node index.js
+      - run: node main.js # هذا هو الملف الأساسي في مشروع Mindcraft
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MINECRAFT_HOST: 'gptoi.aternos.me'
+          MINECRAFT_VERSION: '1.20.1'
+          BOT_NAME: 'Fanoos_AI'
