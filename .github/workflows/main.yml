@@ -17,34 +17,29 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Configure Keys and Server
+      - name: Overwrite Settings
         run: |
-          # إنشاء ملف المفاتيح لـ GPT و Gemini معاً لإيقاف أخطاء الـ API
-          echo '{
-            "openai": "${{ secrets.OPENAI_API_KEY }}",
-            "google": "${{ secrets.GEMINI_API_KEY }}"
-          }' > keys.json
+          # 1. إنشاء ملف المفاتيح
+          echo '{"openai": "${{ secrets.OPENAI_API_KEY }}", "google": "${{ secrets.GEMINI_API_KEY }}"}' > keys.json
           
-          # تعديل ملفات المشروع برمجياً لإجبار البوتات على عنوان أترنوس والمنفذ 50962
-          find src/ -type f -name "*.js" -exec sed -i 's/127.0.0.1/gptoi.aternos.me/g' {} +
-          find src/ -type f -name "*.js" -exec sed -i 's/25565/50962/g' {} +
+          # 2. مسح ملف الإعدادات القديم وكتابة إعدادات أترنوس الخاصة بك مباشرة
+          echo "export default {
+            host: 'gptoi.aternos.me',
+            port: 50962,
+            auth: 'offline',
+            profiles: ['./profiles/gpt.json', './profiles/gemini.json'],
+            load_memory: false,
+            init_message: 'Hello! I am ready.',
+            only_chat_with: []
+          }" > settings.js
 
-      - name: Start GPT Bot
-        run: node main.js & # تشغيل بوت OpenAI في الخلفية
+      - name: Run Bots
+        run: |
+          # تشغيل البوت الأول (GPT) في الخلفية
+          MODEL_PROVIDER=openai BOT_NAME=GPT node main.js & 
+          sleep 10
+          # تشغيل البوت الثاني (Gemini)
+          MODEL_PROVIDER=google BOT_NAME=Gemini node main.js
         env:
-          MODEL_PROVIDER: 'openai'
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          HOST: 'gptoi.aternos.me'
-          PORT: '50962'
-          VERSION: '1.20.1'
-          BOT_NAME: 'GPT'
-
-      - name: Start Gemini Bot
-        run: node main.js # تشغيل بوت Gemini
-        env:
-          MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          HOST: 'gptoi.aternos.me'
-          PORT: '50962'
-          VERSION: '1.20.1'
-          BOT_NAME: 'Gemini'
