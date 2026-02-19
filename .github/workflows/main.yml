@@ -20,14 +20,14 @@ jobs:
       - name: Start Mindcraft Bot
         run: node main.js 
         env:
-          # ربط المفتاح السري الذي أنشأته (GEMINI_API_KEY) بمتطلبات المشروع
+          # إعدادات الذكاء الاصطناعي (Gemini)
           MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           
-          # إعدادات الاتصال المباشرة بسيرفرك
+          # إعدادات الاتصال بسيرفر أترنوس (البيانات من صورتك)
           HOST: 'gptoi.aternos.me'
           PORT: '50962'
           VERSION: '1.20.1'
           
-          # اسم البوت الذي اخترته
+          # اسم البوت الجديد
           BOT_NAME: 'Gemini'
