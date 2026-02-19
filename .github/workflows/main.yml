@@ -20,9 +20,13 @@ jobs:
       - name: Start Mindcraft Bot
         run: node main.js 
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # حل مشكلة المفتاح: نخبره أننا نستخدم جوجل ونعطيه المفتاح الصحيح
+          MODEL_PROVIDER: 'google'
+          GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # حل مشكلة العنوان: نحدد السيرفر الخارجي بدقة
           MINECRAFT_HOST: 'gptoi.aternos.me'
           MINECRAFT_PORT: '50962'
           MINECRAFT_VERSION: '1.20.1'
           BOT_NAME: 'Gemini'
-          USE_GOOGLE_GEMINI: 'true'
+          # إعدادات إضافية لإجبار البوت على قراءة الإعدادات
+          USE_CONFIG: 'false'
