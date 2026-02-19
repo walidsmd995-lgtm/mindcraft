@@ -1,4 +1,4 @@
-name: Minecraft Bots (GPT & Gemini)
+name: Minecraft Bot 24/7
 on:
   push:
     branches: [ develop, main ]
@@ -17,29 +17,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Overwrite Settings
+      - name: Configure
         run: |
-          # 1. إنشاء ملف المفاتيح
-          echo '{"openai": "${{ secrets.OPENAI_API_KEY }}", "google": "${{ secrets.GEMINI_API_KEY }}"}' > keys.json
-          
-          # 2. مسح ملف الإعدادات القديم وكتابة إعدادات أترنوس الخاصة بك مباشرة
+          echo '{"google": "${{ secrets.GEMINI_API_KEY }}"}' > keys.json
           echo "export default {
             host: 'gptoi.aternos.me',
             port: 50962,
-            auth: 'offline',
-            profiles: ['./profiles/gpt.json', './profiles/gemini.json'],
-            load_memory: false,
-            init_message: 'Hello! I am ready.',
-            only_chat_with: []
+            auth: 'offline'
           }" > settings.js
 
-      - name: Run Bots
-        run: |
-          # تشغيل البوت الأول (GPT) في الخلفية
-          MODEL_PROVIDER=openai BOT_NAME=GPT node main.js & 
-          sleep 10
-          # تشغيل البوت الثاني (Gemini)
-          MODEL_PROVIDER=google BOT_NAME=Gemini node main.js
+      - name: Start Bot
+        run: node main.js
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
