@@ -1,4 +1,4 @@
-name: Minecraft Bot 24/7
+name: Minecraft Bots (GPT & Gemini)
 on:
   push:
     branches: [ develop, main ]
@@ -17,17 +17,30 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Configure Mindcraft
+      - name: Configure Keys and Server
         run: |
-          # إنشاء ملف المفاتيح لإيقاف خطأ OpenAI
-          echo '{"google": "${{ secrets.GEMINI_API_KEY }}"}' > keys.json
+          # إنشاء ملف المفاتيح لـ GPT و Gemini معاً لإيقاف أخطاء الـ API
+          echo '{
+            "openai": "${{ secrets.OPENAI_API_KEY }}",
+            "google": "${{ secrets.GEMINI_API_KEY }}"
+          }' > keys.json
           
-          # تعديل ملفات المشروع برمجياً لتغيير IP و Port أترنوس
+          # تعديل ملفات المشروع برمجياً لإجبار البوتات على عنوان أترنوس والمنفذ 50962
           find src/ -type f -name "*.js" -exec sed -i 's/127.0.0.1/gptoi.aternos.me/g' {} +
           find src/ -type f -name "*.js" -exec sed -i 's/25565/50962/g' {} +
 
-      - name: Start Mindcraft Bot
-        run: node main.js 
+      - name: Start GPT Bot
+        run: node main.js & # تشغيل بوت OpenAI في الخلفية
+        env:
+          MODEL_PROVIDER: 'openai'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          HOST: 'gptoi.aternos.me'
+          PORT: '50962'
+          VERSION: '1.20.1'
+          BOT_NAME: 'GPT'
+
+      - name: Start Gemini Bot
+        run: node main.js # تشغيل بوت Gemini
         env:
           MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
