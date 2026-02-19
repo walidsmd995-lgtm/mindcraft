@@ -17,17 +17,22 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Force Configuration
+        run: |
+          # هذا السطر سيقوم بإنشاء ملف keys.json الذي يبحث عنه البوت ويضع فيه مفتاح Gemini
+          echo '{"google": "${{ secrets.GEMINI_API_KEY }}"}' > keys.json
+          
+          # تعديل ملف الإعدادات برمجياً لإجبار البوت على عنوان أترنوس والمنفذ الصحيح
+          # سنقوم بتغيير أي localhost أو 127.0.0.1 إلى عنوان سيرفرك
+          sed -i 's/127.0.0.1/gptoi.aternos.me/g' src/mindcraft/mcserver.js || true
+          sed -i 's/25565/50962/g' src/mindcraft/mcserver.js || true
+
       - name: Start Mindcraft Bot
         run: node main.js 
         env:
-          # إعدادات الذكاء الاصطناعي (Gemini)
           MODEL_PROVIDER: 'google'
           GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          
-          # إعدادات الاتصال بسيرفر أترنوس (البيانات من صورتك)
-          HOST: 'gptoi.aternos.me'
-          PORT: '50962'
-          VERSION: '1.20.1'
-          
-          # اسم البوت الجديد
+          MINECRAFT_HOST: 'gptoi.aternos.me'
+          MINECRAFT_PORT: '50962'
+          MINECRAFT_VERSION: '1.20.1'
           BOT_NAME: 'Gemini'
